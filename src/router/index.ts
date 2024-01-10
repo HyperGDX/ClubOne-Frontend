@@ -1,15 +1,16 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
-import Home from '../pages/Home/index.vue';
+import Login from '../pages/Login/index.vue';
 import Menu from '../pages/Menu/index.vue'
 import WhatsNew from '../pages/WhatsNew/index.vue';
 
 const routes: RouteRecordRaw[] = [
-    { path: '/', name: 'Home', component: Home},
-    { path: '/Menu', name: 'Menu', component: Menu,
-    children: [
-        { path: 'WhatsNew', component: WhatsNew, },
-      ],
+    { path: '/', redirect: '/WhatsNew', },
+    { path: '/', name: 'Menu', component: Menu,
+        children: [
+            { path: 'WhatsNew', component: WhatsNew, },
+        ],
     },
+    { path: "/Login", name: 'Login', component: Login, },
 ];
 
 const router = createRouter({

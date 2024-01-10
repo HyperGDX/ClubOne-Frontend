@@ -21,7 +21,7 @@
             <el-aside width="200px">
                 <el-scrollbar>
                     <el-menu>
-                        <router-link to="/Menu/WhatsNew">
+                        <router-link to="/WhatsNew">
                             <el-menu-item index="1">
                                 <template #title>
                                     <el-icon>
