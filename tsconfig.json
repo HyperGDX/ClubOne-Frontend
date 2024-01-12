@@ -1,24 +1,26 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ES2021",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "skipLibCheck": true,
+    "lib": ["ES2021", "DOM", "DOM.Iterable"],
+    "allowJs": true, //允许编译器编译JavaScript文件。
+    "skipLibCheck": true, //跳过对所有声明文件(*.d.ts)的类型检查。
+    "esModuleInterop": true, //启用CommonJS和ES模块之间的互操作性。
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "preserve",
+    "moduleResolution": "bundler", //指定模块解析策略：'node' (Node.js) 或 'classic' (TypeScript pre-1.6)。
+    "allowImportingTsExtensions": true, //允许从没有设置"baseUrl"的目录导入不带扩展名的TypeScript模块。
+    "resolveJsonModule": true, //允许导入*.json(仅当"module": "commonjs")。
+    "isolatedModules": true, //将每个文件作为单独的模块。
+    "noEmit": true, //不生成输出文件。
+    "jsx": "preserve", //在.tsx文件中支持JSX
 
     /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "strict": true, // 启用所有严格类型检查选项。
+    "noUnusedLocals": true, //禁止未使用的局部变量。
+    "noUnusedParameters": true, //禁止未使用的参数。
+    "noFallthroughCasesInSwitch": true //禁止在switch语句中的case子句中使用fallthrough。
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
