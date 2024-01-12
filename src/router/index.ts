@@ -5,17 +5,17 @@ import WhatsNew from '../pages/WhatsNew/index.vue';
 import General from '../pages/Forum/General/index.vue';
 
 const routes: RouteRecordRaw[] = [
-  { path: '/', redirect: '/WhatsNew' },
+  { path: '/', redirect: '/whatsNew' },
   {
     path: '/',
     name: 'Menu',
     component: Menu,
     children: [
-      { path: 'WhatsNew', component: WhatsNew },
+      { path: 'whatsNew', component: WhatsNew },
       { path: 'forum', children: [{ path: 'general', component: General }] },
     ],
   },
-  { path: '/Login', name: 'Login', component: Login },
+  { path: '/login', name: 'Login', component: Login },
 ];
 
 const router = createRouter({
