@@ -22,10 +22,10 @@
                   class="creator-avatar"
                 />
                 <p>{{ card.creator }}</p>
-                <p class="creator-time">{{ card.createdAt }}</p>
+                <p class="creator-time">{{ card.createdTime }}</p>
               </div>
               <div class="likes-info">
-                <p class="likes-count">{{ card.likes }}</p>
+                <p class="likes-count">{{ card.likeCount }}</p>
               </div>
             </div>
           </el-card>
@@ -36,73 +36,36 @@
 </template>
 
 <script lang="ts">
+import { reactive, onMounted } from 'vue';
+import { getLastestCards } from '@/api/whatsnew';
+
+const cardNum = 2;
+
 export default {
-  data() {
-    return {
-      cards: [
-        {
-          image:
-            'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-          creator: 'Creator1',
-          avatar:
-            'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-          createdAt: '2022-01-01',
-          likes: 10,
-        },
-        {
-          image:
-            'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-          creator: 'Creator2',
-          avatar:
-            'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-          createdAt: '2022-01-02',
-          likes: 20,
-        },
-        {
-          image:
-            'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-          creator: 'Creator3',
-          avatar:
-            'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-          createdAt: '2022-01-03',
-          likes: 30,
-        },
-        {
-          image:
-            'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-          creator: 'Creator4',
-          avatar:
-            'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-          createdAt: '2022-01-04',
-          likes: 40,
-        },
-        {
-          image:
-            'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-          creator: 'Creator5',
-          avatar:
-            'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-          createdAt: '2022-01-05',
-          likes: 50,
-        },
-        {
-          image:
-            'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-          creator: 'Creator6',
-          avatar:
-            'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-          createdAt: '2022-01-06',
-          likes: 60,
-        },
-      ],
-    };
+  setup() {
+    const state = reactive<{
+      cards: any[];
+      error: Error | null;
+    }>({
+      cards: [],
+      error: null,
+    });
+
+    onMounted(async () => {
+      try {
+        const response = await getLastestCards(cardNum);
+        state.cards = response.data.cards;
+      } catch (error) {
+        state.error = error as Error;
+      }
+    });
+
+    return state;
   },
 };
-
-
 </script>
 
-<style scoped>
+<style>
 .grid-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
