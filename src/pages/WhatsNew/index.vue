@@ -98,7 +98,10 @@ export default {
     };
   },
 };
+
+
 </script>
+
 <style scoped>
 .grid-container {
   display: grid;
