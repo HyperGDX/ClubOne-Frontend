@@ -1,6 +1,6 @@
 <template>
   Home
-  <router-link to="/Menu/WhatsNew">
+  <router-link to="/menu/whatsnew">
     <el-button type="primary" size="large">登陆</el-button>
   </router-link>
 </template>
