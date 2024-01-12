@@ -1,0 +1,17 @@
+{
+  "endOfLine": "auto",
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "printWidth": 80,
+  "overrides": [
+    {
+      "files":"./tests/e2e/*.spec.ts",
+      "options": {
+        "endOfLine": "auto",
+        "singleQuote": true,
+        "trailingComma": "es5",
+        "printWidth": 120
+      }
+    }
+  ]
+}
