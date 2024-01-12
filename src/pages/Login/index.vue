@@ -1,6 +1,6 @@
 <template>
   Login Page
-  <router-link to="/WhatsNew">
+  <router-link to="/whatsNew">
     <el-button type="primary" size="large">登陆</el-button>
   </router-link>
 </template>
