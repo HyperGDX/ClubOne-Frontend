@@ -1,35 +1,61 @@
 <template>
   <div v-for="(post, index) in posts" :key="index" class="post">
-    <el-card class="box-card" shadow="hover">
-      <template #header class="card-header">
-        <el-container class="card-header-container">
-          <div class="creator-info">
+    <el-container>
+      <el-aside class="post-header-container">
+        <div class="creator-info">
+          <img :src="post.avatar" alt="" class="creator-avatar" />
+          <p>{{ post.creator }}</p>
+        </div>
+        <div class="actives">
+          <div
+            style="
+              display: flex;
+              margin-top: 140px;
+              flex-direction: row;
+              align-items: center;
+            "
+          >
             <img
-              :src="post.avatar"
-              alt="creator avatar"
-              class="creator-avatar"
+              src="../../../assets/images/like.png"
+              alt=""
+              class="likes-avatar"
             />
-            <p>{{ post.creator }}</p>
+            <div>{{ post.likes }}</div>
           </div>
-          <div>{{ post.title }}</div>
-          <el-button class="button" text>Delete</el-button>
-        </el-container>
-      </template>
-      <el-container class="card-body-container">
-        <div class="text item">{{ post.content }}</div>
-        <el-container>
-          <div v-for="(pic, index) in post.pics" :key="index">
-            <img :src="pic.url" alt="creator avatar" class="body-pic" />
+          <div
+            style="
+              display: flex;
+              margin-top: 15px;
+              flex-direction: row;
+              align-items: center;
+            "
+          >
+            <img
+              src="../../../assets/images/views.png"
+              alt=""
+              class="views-avatar"
+            />
+            <div>{{ post.views }}</div>
           </div>
-        </el-container>
+        </div>
+      </el-aside>
+      <el-container>
+        <el-main class="post-body-container">
+          <div class="post-body-title">{{ post.title }}</div>
+          <div class=".post-body-content">{{ post.content }}</div>
+          <el-container style="margin-top: 16px">
+            <div v-for="(pic, index) in post.pics" :key="index">
+              <img :src="pic.url" alt="creator avatar" class="body-pic" />
+            </div>
+          </el-container>
+        </el-main>
+        <el-footer class="post-footer-container">
+          <div style="margin-left: 8px; margin-bottom: 8px">
+            {{ post.createdAt }}
+          </div>
+        </el-footer>
       </el-container>
-      <template #footer>
-        <el-container class="card-footer-container">
-          <div style="margin-left: 8px">likes: {{ post.likes }}</div>
-          <div>views: {{ post.views }}</div>
-        </el-container>
-      </template>
-    </el-card>
+    </el-container>
   </div>
 </template>
 
@@ -165,23 +191,30 @@ export default {
 </script>
 
 <style scoped>
-/* .card-header { */
-/* display: flex; */
-/* flex-direction: column; */
-/* justify-content: space-between; */
-/* align-items: center; */
-/* } */
-
-.text {
-  font-size: 14px;
+.post {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  display: flex;
+  /* width: 100%; */
+  /* border: 1px solid var(--el-border-color); */
+  border: 1px solid;
+  border-radius: 20px;
 }
 
-.item {
-  margin-bottom: 18px;
+.post-header-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 16px;
+  align-items: flex-start;
+  width: 120px;
 }
 
-.box-card {
-  width: calc(100vw - 280px);
+.actives {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100px;
 }
 
 .creator-avatar {
@@ -189,6 +222,21 @@ export default {
   height: 30px;
   border-radius: 50%;
   margin-right: 10px;
+}
+
+.likes-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.views-avatar {
+  width: 26px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 14px;
+  margin-left: 2px;
 }
 
 .body-pic {
@@ -202,35 +250,31 @@ export default {
   align-items: center;
   justify-content: space-between;
   width: 60px;
+  margin-top: 16px;
 }
 
-.post {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  margin-left: 20px;
-  display: flex;
-  width: 100%;
-}
-
-.card-header-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.card-body-container {
+.post-body-container {
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
   align-items: flex-start;
+  margin-top: 8px;
 }
 
-.card-footer-container {
+.post-body-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.post-body-content {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.post-footer-container {
   display: flex;
   flex-direction: row-reverse;
-  /* justify-content: space-between; */
-  /* align-items: flex-end; */
   margin-right: 8px;
+  height: 32px;
 }
 </style>
