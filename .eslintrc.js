@@ -2,23 +2,27 @@
 module.exports = {
   root: true,
   env: {
-    node: true,
-    jest: true,
+    browser: true,
     es2021: true,
+    node: true,
   },
-  ignorePatterns: ['.eslintrc.js', '*.test.ts', 'mock', '*.spec.ts'],
-  parser: '@typescript-eslint/parser', // Specifies the ESLint parser
+  ignorePatterns: ['.eslintrc.js', 'mock'],
+  parser: 'vue-eslint-parser', // Specifies the ESLint parser
   parserOptions: {
+    parser: '@typescript-eslint/parser', // Specifies the ESLint parser
     ecmaVersion: 12,
     project: 'tsconfig.json',
     sourceType: 'module',
     tsconfigRootDir: __dirname,
+    extraFileExtensions: ['.vue'],
   },
-  plugins: ['@typescript-eslint'],
+  plugins: ['vue', '@typescript-eslint'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:vue/vue3-essential',
+    'airbnb-base',
     'plugin:prettier/recommended',
   ],
   rules: {
