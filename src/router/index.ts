@@ -1,14 +1,14 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
-import Login from '../pages/Login/index.vue';
-import Menu from '../pages/Menu/index.vue';
-import WhatsNew from '../pages/WhatsNew/index.vue';
-import General from '../pages/Forum/General/index.vue';
+import Login from '../pages/Login/loginIndex.vue';
+import Menu from '../pages/Menu/menuIndex.vue';
+import WhatsNew from '../pages/WhatsNew/whatsNewIndex.vue';
+import General from '../pages/Forum/General/forumGeneral.vue';
 
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/whatsNew' },
   {
     path: '/',
-    name: 'Menu',
+    name: 'menu',
     component: Menu,
     children: [
       { path: 'whatsNew', component: WhatsNew },
