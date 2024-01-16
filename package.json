@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint src/**/*.{ts,vue} --fix",
+    "lint": "eslint src --ext .ts,.vue",
+    "lint:fix": "eslint src --ext .ts,.vue --fix",
     "prettier": "prettier --write \"{src,mock,public,tests}/**/*.{js,ts,md,json,vue}\" && sort-package-json \"{mock,public}/**/*.{json}\""
   },
   "eslintConfig": {
