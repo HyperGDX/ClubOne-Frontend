@@ -1,65 +1,68 @@
 <template>
-  <div v-for="(post, index) in posts" :key="index" class="post">
-    <el-container>
-      <el-aside class="post-header-container">
-        <div class="creator-info">
-          <img :src="post.avatar" alt="" class="creator-avatar" />
-          <p>{{ post.creator }}</p>
-        </div>
-        <div class="actives">
-          <div
-            style="
-              display: flex;
-              margin-top: 140px;
-              flex-direction: row;
-              align-items: center;
-            "
-          >
-            <img
-              src="../../../assets/images/like.png"
-              alt=""
-              class="likes-avatar"
-            />
-            <div>{{ post.likes }}</div>
-          </div>
-          <div
-            style="
-              display: flex;
-              margin-top: 15px;
-              flex-direction: row;
-              align-items: center;
-            "
-          >
-            <img
-              src="../../../assets/images/views.png"
-              alt=""
-              class="views-avatar"
-            />
-            <div>{{ post.views }}</div>
-          </div>
-        </div>
-      </el-aside>
+  <div id="app" @scroll="handleScroll" style="overflow: auto; height: 100vh">
+    <div class="post" v-for="(post, index) in posts" :key="index">
       <el-container>
-        <el-main class="post-body-container">
-          <div class="post-body-title">{{ post.title }}</div>
-          <div class=".post-body-content">{{ post.content }}</div>
-          <el-container style="margin-top: 16px">
-            <div v-for="(pic, index) in post.pics" :key="index">
-              <img :src="pic.url" alt="creator avatar" class="body-pic" />
-            </div>
-          </el-container>
-        </el-main>
-        <el-footer class="post-footer-container">
-          <div style="margin-left: 8px; margin-bottom: 8px">
-            {{ post.createdAt }}
+        <el-aside class="post-header-container">
+          <div class="creator-info">
+            <img :src="post.avatar" alt="" class="creator-avatar" />
+            <p>{{ post.creator }}</p>
           </div>
-        </el-footer>
+          <div class="actives">
+            <div
+              style="
+                display: flex;
+                margin-top: 140px;
+                flex-direction: row;
+                align-items: center;
+              "
+            >
+              <img
+                src="../../../assets/images/like.png"
+                alt=""
+                class="likes-avatar"
+              />
+              <div>{{ post.likes }}</div>
+            </div>
+            <div
+              style="
+                display: flex;
+                margin-top: 15px;
+                flex-direction: row;
+                align-items: center;
+              "
+            >
+              <img
+                src="../../../assets/images/views.png"
+                alt=""
+                class="views-avatar"
+              />
+              <div>{{ post.views }}</div>
+            </div>
+          </div>
+        </el-aside>
+        <el-container>
+          <el-main class="post-body-container">
+            <div class="post-body-title">{{ post.title }}</div>
+            <div class=".post-body-content">{{ post.content }}</div>
+            <el-container style="margin-top: 16px">
+              <div v-for="(pic, index) in post.pics" :key="index">
+                <img :src="pic" alt="creator avatar" class="body-pic" />
+              </div>
+            </el-container>
+          </el-main>
+          <el-footer class="post-footer-container">
+            <div style="margin-left: 8px; margin-bottom: 8px">
+              {{ post.createdAt }}
+            </div>
+          </el-footer>
+        </el-container>
       </el-container>
-    </el-container>
+    </div>
+    <div v-if="loading">Loading...</div>
   </div>
 </template>
 
-<script lang="ts">
+<!-- <script lang="ts">
 export default {
   data() {
     return {
@@ -188,6 +191,37 @@ export default {
     };
   },
 };
+</script> -->
+
+<script lang="ts" setup>
+import { ref, onMounted } from 'vue';
+import getPosts from '@/api/forums.ts';
+import type { Posts } from '@/types/forum.d.ts';
+
+const channelId = 0; // 请替换为你的channelId
+let pageIndex = 1;
+const posts = ref<Posts[]>([]);
+const loading = ref(false);
+
+const fetchPosts = async () => {
+  loading.value = true;
+  const res = (await getPosts(channelId, pageIndex)).data;
+  // console.log(response);
+  posts.value = [...posts.value, ...res.data];
+  loading.value = false;
+  pageIndex += 1;
+};
+
+const handleScroll = (event: any) => {
+  const { target } = event;
+  if (target.scrollHeight - target.scrollTop === target.clientHeight) {
+    fetchPosts();
+  }
+};
+
+onMounted(() => {
+  fetchPosts();
+});
 </script>
 
 <style scoped>
@@ -200,6 +234,7 @@ export default {
   /* border: 1px solid var(--el-border-color); */
   border: 1px solid;
   border-radius: 20px;
+  overflow: auto;
 }
 
 .post-header-container {
