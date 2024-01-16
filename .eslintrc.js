@@ -213,4 +213,14 @@ module.exports = {
     'unicode-bom': ['error', 'never'],
     'use-isnan': 'error',
   },
+  settings: {
+    'import/resolver': {
+      alias: {
+        map: [
+          ['@', './src']
+        ],
+        extensions: ['.ts', '.js', '.jsx', '.json', '.vue']
+      }
+    }
+  }
 };

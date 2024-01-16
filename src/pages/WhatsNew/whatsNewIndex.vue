@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import { reactive, onMounted } from 'vue';
-import { getLastestCards } from '@/api/whatsnew';
+import getLastestCards from '@/api/whatsnew.ts';
 
 const cardNum = 2;
 
