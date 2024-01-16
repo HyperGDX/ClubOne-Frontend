@@ -95,12 +95,19 @@ import { ref, onMounted } from 'vue';
 import getLastestCards from '@/api/whatsnew.ts';
 
 const cardNum = 3;
+interface Card {
+  image: string;
+  avatar: string;
+  creator: string;
+  createdTime: string;
+  likeCount: number;
+}
 
 export default {
   setup() {
-    const forumCards = ref([]);
-    const clubCards = ref([]);
-    const shopCards = ref([]);
+    const forumCards = ref<Card[]>([]);
+    const clubCards = ref<Card[]>([]);
+    const shopCards = ref<Card[]>([]);
 
     onMounted(async () => {
       try {
