@@ -1,5 +1,9 @@
 <template>
-  <div id="app" @scroll="handleScroll" style="overflow: auto; height: 100vh">
+  <div
+    id="app"
+    v-infinite-scroll="handleScroll"
+    style="overflow: auto; height: 100vh"
+  >
     <div class="post" v-for="(post, index) in posts" :key="index">
       <el-container>
         <el-aside class="post-header-container">
@@ -212,11 +216,8 @@ const fetchPosts = async () => {
   pageIndex += 1;
 };
 
-const handleScroll = (event: any) => {
-  const { target } = event;
-  if (target.scrollHeight - target.scrollTop === target.clientHeight) {
-    fetchPosts();
-  }
+const handleScroll = () => {
+  fetchPosts();
 };
 
 onMounted(() => {
