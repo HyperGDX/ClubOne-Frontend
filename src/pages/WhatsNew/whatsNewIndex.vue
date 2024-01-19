@@ -2,7 +2,7 @@
   <div class="common-layout">
     <el-container>
       <el-header>
-        <el-button type="primary">Refresh</el-button>
+        <el-button type="primary" @click="refreshPage">Refresh</el-button>
       </el-header>
       <el-main>
         <p>Forum</p>
@@ -26,7 +26,12 @@
                 <p class="creator-time">{{ card.createdTime }}</p>
               </div>
               <div class="likes-info">
-                <p class="likes-count">{{ card.likeCount }}</p>
+                <img
+                  src="../../assets/images/like.png"
+                  alt=""
+                  class="likes-avatar"
+                />
+                <div class="likes-count">{{ card.likeCount }}</div>
               </div>
             </div>
           </el-card>
@@ -53,7 +58,12 @@
                 <p class="creator-time">{{ card.createdTime }}</p>
               </div>
               <div class="likes-info">
-                <p class="likes-count">{{ card.likeCount }}</p>
+                <img
+                  src="../../assets/images/like.png"
+                  alt=""
+                  class="likes-avatar"
+                />
+                <div class="likes-count">{{ card.likeCount }}</div>
               </div>
             </div>
           </el-card>
@@ -80,7 +90,12 @@
                 <p class="creator-time">{{ card.createdTime }}</p>
               </div>
               <div class="likes-info">
-                <p class="likes-count">{{ card.likeCount }}</p>
+                <img
+                  src="../../assets/images/like.png"
+                  alt=""
+                  class="likes-avatar"
+                />
+                <div class="likes-count">{{ card.likeCount }}</div>
               </div>
             </div>
           </el-card>
@@ -93,17 +108,16 @@
 <script lang="ts">
 import { ref, onMounted } from 'vue';
 import getLastestCards from '@/api/whatsnew.ts';
+import type { Card } from '@/types/card.d.ts';
 
 const cardNum = 3;
-interface Card {
-  image: string;
-  avatar: string;
-  creator: string;
-  createdTime: string;
-  likeCount: number;
-}
 
 export default {
+  methods: {
+    refreshPage() {
+      window.location.reload();
+    },
+  },
   setup() {
     const forumCards = ref<Card[]>([]);
     const clubCards = ref<Card[]>([]);
@@ -171,11 +185,17 @@ export default {
 
 .likes-info {
   display: flex;
+  justify-content: flex-start;
   align-items: center;
-  justify-content: space-between;
 }
 
 .likes-count {
-  margin-left: auto;
+  margin-left: 10px; /* 可根据需要调整 */
+}
+
+.likes-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
 }
 </style>
