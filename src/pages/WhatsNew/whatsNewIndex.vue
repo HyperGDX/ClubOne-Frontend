@@ -108,7 +108,7 @@
 <script lang="ts">
 import { ref, onMounted } from 'vue';
 import getLastestCards from '@/api/whatsnew.ts';
-import type { Card } from '@/types/card.d.ts';
+import type { Card } from '@/types/whatsnew.d.ts';
 
 const cardNum = 3;
 
