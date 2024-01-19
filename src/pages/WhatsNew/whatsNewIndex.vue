@@ -112,9 +112,9 @@ export default {
     onMounted(async () => {
       try {
         const response = await getLastestCards(cardNum);
-        forumCards.value = response.data.forumCards.slice(0, cardNum);
-        clubCards.value = response.data.clubCards.slice(0, cardNum);
-        shopCards.value = response.data.shopCards.slice(0, cardNum);
+        forumCards.value = response.data.data.forumCards.slice(0, cardNum);
+        clubCards.value = response.data.data.clubCards.slice(0, cardNum);
+        shopCards.value = response.data.data.shopCards.slice(0, cardNum);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);

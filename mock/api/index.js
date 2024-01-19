@@ -1,4 +1,4 @@
 module.exports = {
-  global: require('./global'),
   posts: require('./posts'),
+  whatsnew: require('./whatsnew')
 };
