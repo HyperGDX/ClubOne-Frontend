@@ -28,6 +28,7 @@
                 </template>
               </el-menu-item>
             </router-link>
+
             <el-sub-menu index="2">
               <template #title>
                 <el-icon> <ChatLineSquare /> </el-icon>Forum
@@ -50,7 +51,15 @@
               </template>
             </el-sub-menu>
 
-            <el-sub-menu index="5">
+            <router-link to="/wiki">
+              <el-menu-item index="5">
+                <template #title>
+                  <el-icon> <Notification /> </el-icon>Wiki
+                </template>
+              </el-menu-item>
+            </router-link>
+
+            <el-sub-menu index="6">
               <template #title>
                 <el-icon> <User /> </el-icon>My
               </template>

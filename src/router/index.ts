@@ -3,6 +3,7 @@ import Login from '../pages/Login/loginIndex.vue';
 import Menu from '../pages/Menu/menuIndex.vue';
 import WhatsNew from '../pages/WhatsNew/whatsNewIndex.vue';
 import General from '../pages/Forum/General/forumGeneral.vue';
+import Wiki from '../pages/Wiki/wikiIndex.vue';
 
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/whatsNew' },
@@ -13,6 +14,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: 'whatsNew', component: WhatsNew },
       { path: 'forum', children: [{ path: 'general', component: General }] },
+      { path: 'wiki', component: Wiki },
     ],
   },
   { path: '/login', name: 'Login', component: Login },
