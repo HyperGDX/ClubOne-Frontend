@@ -2,7 +2,6 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import Login from '../pages/Login/loginIndex.vue';
 import Menu from '../pages/Menu/menuIndex.vue';
 import WhatsNew from '../pages/WhatsNew/whatsNewIndex.vue';
-import General from '../pages/Forum/General/forumGeneral.vue';
 import Wiki from '../pages/Wiki/wikiIndex.vue';
 
 const routes: RouteRecordRaw[] = [
@@ -13,7 +12,15 @@ const routes: RouteRecordRaw[] = [
     component: Menu,
     children: [
       { path: 'whatsNew', component: WhatsNew },
-      { path: 'forum', children: [{ path: 'general', component: General }] },
+      {
+        path: 'forum',
+        children: [
+          {
+            path: 'general',
+            component: () => import('../pages/Forum/General/forumGeneral.vue'),
+          },
+        ],
+      },
       { path: 'wiki', component: Wiki },
     ],
   },
