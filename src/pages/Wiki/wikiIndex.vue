@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { ref, watch, onMounted } from 'vue';
-import { debounce } from 'lodash';
+import { throttle } from 'lodash';
 import { updateWiki, getWiki } from '@/api/wiki.ts';
 
 const wikiIndex = 'aabbcc';
@@ -16,19 +16,18 @@ const wikiIndex = 'aabbcc';
 export default {
   setup() {
     const textareaValue = ref('');
-    const debouncedUpdateAPI = debounce(updateWiki, 1000);
+    const throttleUpdateAPI = throttle(updateWiki, 1000);
 
     watch(
       textareaValue,
       (_, oldVal) => {
         if (oldVal !== '') {
-          debouncedUpdateAPI(wikiIndex, textareaValue.value); // 当textareaValue有变化时 调用debounced函数
+          throttleUpdateAPI(wikiIndex, textareaValue.value);
         }
       },
       { flush: 'post' }
     );
     onMounted(async () => {
-      // 初始化时，调用get函数
       getWiki(wikiIndex).then((response) => {
         textareaValue.value = response.data.data.wikiContent;
       });
