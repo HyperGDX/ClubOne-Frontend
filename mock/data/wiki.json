@@ -2,7 +2,7 @@
   "GET": {
     "wiki": 
     {
-        "wikiContent": "123"
+        "wikiContent": "<p>123</p><p>321</p>"
     }
   }
 }
