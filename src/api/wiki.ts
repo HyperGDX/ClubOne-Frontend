@@ -1,20 +1,32 @@
 import request from '@/utils/request.ts';
 
-export function getWiki(wikiIndex: string) {
+export function getWiki(wikiUuid: string) {
   return request({
-    url: `/wiki`,
+    url: `/wiki/${wikiUuid}`,
     method: 'get',
-    params: { wikiIndex },
   });
 }
 
-export function updateWiki(wikiIndex: string, wikiContent: string) {
+export function updateWiki(wikiUuid: string, wikiContent: string) {
+  return request({
+    url: `/wiki/${wikiUuid}`,
+    method: 'put',
+    data: {
+      wikiContent,
+    },
+  });
+}
+
+export function createWiki() {
   return request({
     url: `/wiki`,
     method: 'post',
-    data: {
-      wikiIndex,
-      wikiContent,
-    },
+  });
+}
+
+export function deleteWiki(wikiUuid: string) {
+  return request({
+    url: `/wiki/${wikiUuid}`,
+    method: 'delete',
   });
 }

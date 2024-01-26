@@ -14,7 +14,7 @@ import { updateWiki, getWiki } from '@/api/wiki.ts';
 import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
-const wikiIndex = 'aabbcc';
+const wikiUuid = '1860729a-bb50-11ee-b5ce-0242ac110002';
 
 export default {
   components: {
@@ -33,14 +33,14 @@ export default {
       wikiContent,
       (_, oldVal) => {
         if (oldVal !== '') {
-          throttleUpdateAPI(wikiIndex, wikiContent.value);
+          throttleUpdateAPI(wikiUuid, wikiContent.value);
         }
       },
       { flush: 'post' }
     );
     onMounted(async () => {
-      getWiki(wikiIndex).then((response) => {
-        wikiContent.value = response.data.data.wikiContent;
+      getWiki(wikiUuid).then((response) => {
+        wikiContent.value = response.data.data.Content;
       });
     });
 
