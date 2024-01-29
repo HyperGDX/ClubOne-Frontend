@@ -9,7 +9,7 @@ module.exports = {
     res.json({
       status: 200,
       message: 'success',
-      data: data,
+      data,
     })
   ),
 };

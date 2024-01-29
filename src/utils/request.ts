@@ -19,7 +19,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response) => {
     // 这里可以添加一些响应的处理
-    return response;
+    return response.data;
   },
   (error) => {
     // 响应错误的处理
