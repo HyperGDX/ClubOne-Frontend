@@ -1,41 +1,81 @@
 <template>
-  <el-input
-    v-model="textareaValue"
-    type="textarea"
-    placeholder="Please input"
-  />
+  <el-container style="height: 100vh">
+    <el-aside width="200px">
+      <el-button type="primary" @click="createWiki">New</el-button>
+      <el-menu>
+        <el-menu-item-group>
+          <el-menu-item
+            v-for="(wiki, index) in wikiList"
+            :key="index"
+            :index="`${index + 1}-1`"
+            @click="loadWikiContent(wiki.UUID)"
+          >
+            {{ wiki.Title }}
+          </el-menu-item>
+        </el-menu-item-group>
+      </el-menu>
+    </el-aside>
+    <el-main>
+      <quill-editor
+        ref="QuillEditor"
+        v-model:content="curWikiContent"
+        contentType="html"
+      />
+    </el-main>
+  </el-container>
 </template>
 
 <script lang="ts">
 import { ref, watch, onMounted } from 'vue';
-import { debounce } from 'lodash';
-import { updateWiki, getWiki } from '@/api/wiki.ts';
+import { throttle } from 'lodash';
+import { updateWiki, getWiki, getWikis, createWiki } from '@/api/wiki.ts';
+import { QuillEditor } from '@vueup/vue-quill';
+import type { WikiTitle } from '@/types/wiki.d.ts';
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
-const wikiIndex = 'aabbcc';
+const onlyCreator = '1';
+const curWikiContent = ref('');
+const wikiList = ref<WikiTitle[]>([]);
+const throttleUpdateAPI = throttle(updateWiki, 3000);
+const curUUID = ref('');
 
 export default {
+  components: {
+    QuillEditor,
+  },
+  methods: {
+    createWiki() {
+      createWiki(onlyCreator);
+    },
+    async loadWikiContent(uuid: string) {
+      const response = await getWiki(uuid);
+      curWikiContent.value = response.data.data.Content;
+      curUUID.value = response.data.data.Uuid;
+    },
+  },
   setup() {
-    const textareaValue = ref('');
-    const debouncedUpdateAPI = debounce(updateWiki, 1000);
-
     watch(
-      textareaValue,
+      curWikiContent,
       (_, oldVal) => {
         if (oldVal !== '') {
-          debouncedUpdateAPI(wikiIndex, textareaValue.value); // 当textareaValue有变化时 调用debounced函数
+          throttleUpdateAPI(curUUID.value, curWikiContent.value);
         }
       },
       { flush: 'post' }
     );
     onMounted(async () => {
-      // 初始化时，调用get函数
-      getWiki(wikiIndex).then((response) => {
-        textareaValue.value = response.data.data.wikiContent;
+      await getWikis().then((response) => {
+        wikiList.value = response.data.data;
+      });
+      await getWiki(wikiList.value[0].UUID).then((response) => {
+        curWikiContent.value = response.data.data.Content;
+        curUUID.value = response.data.data.Uuid;
       });
     });
 
     return {
-      textareaValue,
+      wikiList,
+      curWikiContent,
     };
   },
 };
