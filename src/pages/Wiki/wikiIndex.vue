@@ -1,51 +1,81 @@
 <template>
-  <quill-editor
-    ref="QuillEditor"
-    v-model:content="wikiContent"
-    contentType="html"
-  />
-  <button v-on:click="printContent">Print Content In Console</button>
+  <el-container style="height: 100vh">
+    <el-aside width="200px">
+      <el-button type="primary" @click="createWiki">New</el-button>
+      <el-menu>
+        <el-menu-item-group>
+          <el-menu-item
+            v-for="(wiki, index) in wikiList"
+            :key="index"
+            :index="`${index + 1}-1`"
+            @click="loadWikiContent(wiki.UUID)"
+          >
+            {{ wiki.Title }}
+          </el-menu-item>
+        </el-menu-item-group>
+      </el-menu>
+    </el-aside>
+    <el-main>
+      <quill-editor
+        ref="QuillEditor"
+        v-model:content="curWikiContent"
+        contentType="html"
+      />
+    </el-main>
+  </el-container>
 </template>
 
 <script lang="ts">
 import { ref, watch, onMounted } from 'vue';
 import { throttle } from 'lodash';
-import { updateWiki, getWiki } from '@/api/wiki.ts';
+import { updateWiki, getWiki, getWikis, createWiki } from '@/api/wiki.ts';
 import { QuillEditor } from '@vueup/vue-quill';
+import type { WikiTitle } from '@/types/wiki.d.ts';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
-const wikiUuid = '1860729a-bb50-11ee-b5ce-0242ac110002';
+const onlyCreator = '1';
+const curWikiContent = ref('');
+const wikiList = ref<WikiTitle[]>([]);
+const throttleUpdateAPI = throttle(updateWiki, 3000);
+const curUUID = ref('');
 
 export default {
   components: {
     QuillEditor,
   },
   methods: {
-    printContent() {
-      // eslint-disable-next-line
-      console.log(this.wikiContent);
+    createWiki() {
+      createWiki(onlyCreator);
+    },
+    async loadWikiContent(uuid: string) {
+      const response = await getWiki(uuid);
+      curWikiContent.value = response.data.data.Content;
+      curUUID.value = response.data.data.Uuid;
     },
   },
   setup() {
-    const wikiContent = ref('');
-    const throttleUpdateAPI = throttle(updateWiki, 3000);
     watch(
-      wikiContent,
+      curWikiContent,
       (_, oldVal) => {
         if (oldVal !== '') {
-          throttleUpdateAPI(wikiUuid, wikiContent.value);
+          throttleUpdateAPI(curUUID.value, curWikiContent.value);
         }
       },
       { flush: 'post' }
     );
     onMounted(async () => {
-      getWiki(wikiUuid).then((response) => {
-        wikiContent.value = response.data.data.Content;
+      await getWikis().then((response) => {
+        wikiList.value = response.data.data;
+      });
+      await getWiki(wikiList.value[0].UUID).then((response) => {
+        curWikiContent.value = response.data.data.Content;
+        curUUID.value = response.data.data.Uuid;
       });
     });
 
     return {
-      wikiContent,
+      wikiList,
+      curWikiContent,
     };
   },
 };
