@@ -1,10 +1,9 @@
 export interface Posts {
-  image: string;
-  creator: string;
-  avatar: string;
-  createdAt: Date;
-  likes: number;
-  views: number;
+  userName: string;
+  userAvatar: string;
+  createTime: Date;
+  likeCount: number;
+  viewCount: number;
   content: string;
   title: string;
   pics: string[];

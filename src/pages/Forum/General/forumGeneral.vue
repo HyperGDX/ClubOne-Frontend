@@ -9,8 +9,8 @@
       <el-container>
         <el-aside class="post-header-container">
           <div class="creator-info">
-            <img :src="post.avatar" alt="" class="creator-avatar" />
-            <p>{{ post.creator }}</p>
+            <img :src="post.userAvatar" alt="" class="creator-avatar" />
+            <p>{{ post.userName }}</p>
           </div>
           <div class="actives">
             <div
@@ -26,7 +26,7 @@
                 alt=""
                 class="likes-avatar"
               />
-              <div>{{ post.likes }}</div>
+              <div>{{ post.likeCount }}</div>
             </div>
             <div
               style="
@@ -41,7 +41,7 @@
                 alt=""
                 class="views-avatar"
               />
-              <div>{{ post.views }}</div>
+              <div>{{ post.viewCount }}</div>
             </div>
           </div>
         </el-aside>
@@ -57,7 +57,7 @@
           </el-main>
           <el-footer class="post-footer-container">
             <div style="margin-left: 8px; margin-bottom: 8px">
-              {{ post.createdAt }}
+              {{ post.createTime }}
             </div>
           </el-footer>
         </el-container>
@@ -82,8 +82,8 @@ const fetchPosts = async () => {
   loading.value = true;
   // 设置滚动节流时间
   setTimeout(async () => {
-    const res = (await getPosts(channelId, pageIndex.value)).data;
-    posts.value = [...posts.value, ...res.data];
+    const res: Posts[] = (await getPosts(channelId, pageIndex.value)).data;
+    posts.value = [...posts.value, ...res];
     loading.value = false;
   }, 1000);
 };
