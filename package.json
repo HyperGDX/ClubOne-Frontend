@@ -10,7 +10,7 @@
     "lint": "eslint src --ext .ts,.vue",
     "lint:fix": "eslint src --ext .ts,.vue --fix",
     "prettier": "prettier --write \"{src,mock,public,tests}/**/*.{js,ts,md,json,vue}\" && sort-package-json \"{mock,public}/**/*.{json}\"",
-    "mock": "mocker ./mock --host localhost --port 8081"
+    "mock": "mocker ./mock --host localhost --port 8102"
   },
   "eslintConfig": {
     "extends": [
