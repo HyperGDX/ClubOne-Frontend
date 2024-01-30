@@ -1,6 +1,7 @@
-FROM node:21
+FROM node:16.20.2
 COPY ./ /app
 WORKDIR /app
+RUN npm cache clean --force
 RUN npm install && npm run build
 
 FROM nginx

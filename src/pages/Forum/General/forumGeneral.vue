@@ -1,6 +1,5 @@
 <template>
   <div
-    id="app"
     v-infinite-scroll="handleScroll"
     v-infinite-scroll-disabled="disabled"
     style="overflow: auto; height: 100vh"
