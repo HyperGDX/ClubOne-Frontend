@@ -72,7 +72,7 @@ import { computed, onMounted, ref } from 'vue';
 import getPosts from '@/api/forums.ts';
 import type { Posts } from '@/types/forum.d.ts';
 
-const channelId = 0; // 请替换为你的channelId
+const channelId = 1; // 请替换为你的channelId
 const pageIndex = ref(0);
 const posts = ref<Posts[]>([]);
 const loading = ref(false);
