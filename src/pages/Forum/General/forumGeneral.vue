@@ -79,11 +79,15 @@ const loading = ref(false);
 
 const fetchPosts = async () => {
   loading.value = true;
+  let res: Posts[] = [];
   // 设置滚动节流时间
   setTimeout(async () => {
-    const res: Posts[] = (await getPosts(channelId, pageIndex.value)).data;
+    res = (await getPosts(channelId, pageIndex.value)).data;
     posts.value = [...posts.value, ...res];
     loading.value = false;
+    if (res.length === 0) {
+      loading.value = false;
+    }
   }, 1000);
 };
 
