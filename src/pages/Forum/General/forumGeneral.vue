@@ -85,6 +85,9 @@ const fetchPosts = async () => {
     posts.value = [...posts.value, ...res];
     loading.value = false;
   }, 1000);
+  if (posts.value.length === 0) {
+    loading.value = false;
+  }
 };
 
 onMounted(() => {
@@ -102,7 +105,7 @@ const handleScroll = computed(() => {
 });
 
 const noMore = computed(() => {
-  return pageIndex.value > 5;
+  return posts.value.length === 0;
 });
 
 const disabled = computed(() => {
