@@ -19,6 +19,10 @@ const routes: RouteRecordRaw[] = [
             path: 'general',
             component: () => import('../pages/Forum/General/forumGeneral.vue'),
           },
+          {
+            path: 'addPost',
+            component: () => import('../pages/Forum/AddPost/addPosts.vue'),
+          },
         ],
       },
       { path: 'wiki', component: Wiki },

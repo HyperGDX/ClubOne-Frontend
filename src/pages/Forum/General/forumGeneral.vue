@@ -69,8 +69,8 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue';
-import getPosts from '@/api/forums.ts';
-import type { Posts } from '@/types/forum.d.ts';
+import { getPosts } from '@/api/forums';
+import type { Posts } from '@/types/forum.d';
 
 const channelId = 1; // 请替换为你的channelId
 const pageIndex = ref(0);

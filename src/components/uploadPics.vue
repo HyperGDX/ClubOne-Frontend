@@ -84,3 +84,28 @@ const handlePreview: UploadProps['onPreview'] = (file) => {
   console.log(file);
 };
 </script>
+<!-- import { ref } from "vue";
+import type { UploadProps, UploadUserFile } from 'element-plus';
+export default {
+  name: "uploadPics",
+  setup() {
+const fileList = ref<UploadUserFile[]>([
+  {
+    name: 'food.jpeg',
+    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+  },
+  {
+    name: 'food2.jpeg',
+    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+  },
+]);
+
+const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
+  console.log(uploadFile, uploadFiles);
+};
+
+const handlePreview: UploadProps['onPreview'] = (file) => {
+  console.log(file);
+};
+  }
+}; -->

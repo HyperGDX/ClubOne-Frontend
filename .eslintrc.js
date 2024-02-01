@@ -26,6 +26,13 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   rules: {
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        ts: 'never',
+      },
+    ],
     '@typescript-eslint/no-empty-interface': 'warn',
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/no-unused-vars': 'error',

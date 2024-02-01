@@ -1,6 +1,6 @@
 <template>
   <el-container class="layout-container-demo" style="height: 100vh">
-    <el-header style="text-align: right">
+    <el-header style="display: flex; flex-direction: row-reverse">
       <div class="toolbar">
         <el-dropdown>
           <el-icon style="margin-right: 8px; margin-top: 1px">
@@ -15,6 +15,11 @@
           </template>
         </el-dropdown>
         <span>Tom</span>
+      </div>
+      <div class="addButton">
+        <router-link to="/forum/addPost">
+          <el-button type="primary" round>Add Posts</el-button>
+        </router-link>
       </div>
     </el-header>
     <el-container>
@@ -63,6 +68,9 @@
               <template #title>
                 <el-icon> <User /> </el-icon>My
               </template>
+              <router-link to="/forum/general">
+                <el-menu-item index="6-1">My Posts</el-menu-item>
+              </router-link>
             </el-sub-menu>
           </el-menu>
         </el-scrollbar>
@@ -105,6 +113,14 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+  right: 20px;
+}
+
+.layout-container-demo .addButton {
+  margin-right: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   right: 20px;
 }
 </style>
