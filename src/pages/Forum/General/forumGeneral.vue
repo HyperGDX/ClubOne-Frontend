@@ -106,7 +106,7 @@ const handleScroll = computed(() => {
 });
 
 const noMore = computed(() => {
-  return posts.value.length === 0;
+  return pageIndex.value > 5;
 });
 
 const disabled = computed(() => {
