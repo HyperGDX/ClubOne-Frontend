@@ -29,7 +29,7 @@
       </el-form-item>
       <el-form-item>
         <el-upload
-          v-model:file-list="dataObj"
+          v-model:file-list="fileList"
           accept="image/jpeg,image/png"
           class="upload-demo"
           action="https://company-one-pics.oss-cn-nanjing.aliyuncs.com"
@@ -37,8 +37,10 @@
           multiple
           list-type="picture-card"
           :before-upload="beforeUpload"
+          :on-success="handleUploadSuccess"
           :limit="9"
           :on-exceed="handleExceed"
+          :data="dataObj"
         >
           <el-button type="primary">Upload</el-button>
           <template #tip>
@@ -58,8 +60,8 @@
 
 <script lang="ts" setup>
 // import type { UploadProps, UploadUserFile } from 'element-plus';
-import { reactive } from 'vue';
-import { ElMessage, UploadProps } from 'element-plus';
+import { reactive, ref } from 'vue';
+import {ElMessage, UploadProps, UploadUserFile} from 'element-plus';
 import { v4 } from 'uuid';
 import { getOSSPolicy } from '@/api/forums';
 
@@ -76,22 +78,31 @@ const form = reactive({
   pics: [],
 });
 
+// const dataObj = reactive({
+//   policy: 'eyJleHBpcmF0aW9uIjoiMjAyNC0wMi0wMVQwOTowODo1MS4zMDdaIiwiY29uZGl0aW9ucyI6W1siY29udGVudC1sZW5ndGgtcmFuZ2UiLDAsMTA0ODU3NjAwMF0sWyJzdGFydHMtd2l0aCIsIiRrZXkiLCIyMDI0LTAyLTAxLyJdXX0=',
+//   signature: '7LS5sOJbhtgGtqBL0YnQmeKj/EI=',
+//   key: 'LTAI5tQp4aFCsjijg5XAXDTc',
+//   OSSAccessKeyId: 'LTAI5tQp4aFCsjijg5XAXDTc',
+//   // accessKeyId : 'LTAI5tQp4aFCsjijg5XAXDTc',
+//   dir: '2024-02-01/',
+//   host: 'https://company-one-pics.oss-cn-nanjing.aliyuncs.com',
+// });
+
 const dataObj = reactive({
   policy: '',
   signature: '',
   key: '',
-  ossaccessKeyId: '',
+  OSSAccessKeyId: '',
   dir: '',
   host: '',
-  uuid: '',
 });
 
-// const fileList = ref<UploadUserFile[]>([
-//   {
-//     name: 'food.jpeg',
-//     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-//   },
-// ]);
+const fileList = ref<UploadUserFile[]>([
+  // {
+  //   name: 'food.jpeg',
+  //   url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+  // },
+]);
 
 const onSubmit = () => {
   console.log('submit!');
@@ -102,19 +113,32 @@ const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
     ElMessage.error('Picture size can not exceed 5MB!');
     return false;
   }
-  getOSSPolicy()
-    .then((response) => {
-      dataObj.policy = response.data.policy;
-      dataObj.signature = response.data.signature;
-      dataObj.ossaccessKeyId = response.data.accessid;
-      dataObj.key = `${response.data.dir}/${v4()}_\${filename}`;
-      dataObj.dir = response.data.dir;
-      dataObj.host = response.data.host;
-    })
-    .catch((err) => {
-      console.log('出错了...', err);
-    });
-  return true;
+  return new Promise((resolve, reject) => {
+    getOSSPolicy()
+        .then((response) => {
+          console.log(response);
+          dataObj.policy = response.data.policy;
+          dataObj.signature = response.data.signature;
+          dataObj.OSSAccessKeyId = response.data.accessid;
+          dataObj.key = `${response.data.dir}/${v4()}_\${filename}`;
+          dataObj.dir = response.data.dir;
+          dataObj.host = response.data.host;
+          resolve(true)
+        })
+        .catch(err => {
+          console.log("出错了...",err)
+          reject(false);
+        });
+  });
+};
+
+
+const handleUploadSuccess = (res, file) => {
+  fileList.value.push({
+    name: file.name,
+    // url: this.dataObj.host + "/" + this.dataObj.dir + "/" + file.name； 替换${filename}为真正的文件名
+    url: dataObj.host + "/" + dataObj.key.replace("${filename}",file.name)
+  });
 };
 
 const handleExceed: UploadProps['onExceed'] = (files, uploadFiles) => {
