@@ -8,3 +8,11 @@ export interface Posts {
   title: string;
   pics: string[];
 }
+
+export interface AddPosts {
+  content: string;
+  title: string;
+  pics: string[];
+  channelId: string[];
+  status: boolean;
+}

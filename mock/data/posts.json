@@ -264,11 +264,11 @@
     ],
     "forum/posts/OSSPolicy": {
       "accessid": "LTAI5tQp4aFCsjijg5XAXDTc",
-      "policy": "eyJleHBpcmF0aW9uIjoiMjAyNC0wMi0wMVQwOTowODo1MS4zMDdaIiwiY29uZGl0aW9ucyI6W1siY29udGVudC1sZW5ndGgtcmFuZ2UiLDAsMTA0ODU3NjAwMF0sWyJzdGFydHMtd2l0aCIsIiRrZXkiLCIyMDI0LTAyLTAxLyJdXX0=",
-      "signature": "7LS5sOJbhtgGtqBL0YnQmeKj/EI=",
-      "dir": "2024-02-01/",
+      "policy": "eyJleHBpcmF0aW9uIjoiMjAyNC0wMi0wMlQwMjoyMzoxMC4zNDFaIiwiY29uZGl0aW9ucyI6W1siY29udGVudC1sZW5ndGgtcmFuZ2UiLDAsMTA0ODU3NjAwMF0sWyJzdGFydHMtd2l0aCIsIiRrZXkiLCIyMDI0LTAyLTAyLyJdXX0=",
+      "signature": "8MgxxQFubtamppbz0Xm0m7W8icg=",
+      "dir": "2024-02-02/",
       "host": "https://company-one-pics.oss-cn-nanjing.aliyuncs.com",
-      "expire": "1706778531"
+      "expire": "1706840590"
     }
   }
 }

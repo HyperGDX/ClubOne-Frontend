@@ -2,22 +2,24 @@
   <div class="addPostPage">
     <el-form :model="form" label-width="120px">
       <el-form-item label="Title">
-        <el-input v-model="form.name" placeholder="Title" />
+        <el-input v-model="form.title" placeholder="Title" />
       </el-form-item>
       <el-form-item label="Content">
         <el-input
-          v-model="form.desc"
+          v-model="form.content"
           :autosize="{ minRows: 4, maxRows: 6 }"
           type="textarea"
           placeholder="Content"
         />
       </el-form-item>
       <el-form-item label="Channel">
-        <el-checkbox-group v-model="form.channel">
-          <el-checkbox label="General" name="channel" />
-          <el-checkbox label="Club" name="channel" />
-          <el-checkbox label="Tech" name="channel" />
-          <el-checkbox label="Others" name="channel" />
+        <el-checkbox-group v-model="form.channelId">
+          <el-checkbox-button
+            v-for="channelId in channels"
+            :key="channelId"
+            :label="channelId"
+            >{{ channelId }}
+          </el-checkbox-button>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item label="Status">
@@ -32,15 +34,15 @@
           v-model:file-list="fileList"
           accept="image/jpeg,image/png"
           class="upload-demo"
-          action="https://company-one-pics.oss-cn-nanjing.aliyuncs.com"
           show-file-list
           multiple
+          auto-upload
           list-type="picture-card"
+          :http-request="requestUpload"
           :before-upload="beforeUpload"
-          :on-success="handleUploadSuccess"
-          :limit="9"
+          :limit="upLoadPicsLimit"
           :on-exceed="handleExceed"
-          :data="dataObj"
+          :on-success="handleUploadSuccess"
         >
           <el-button type="primary">Upload</el-button>
           <template #tip>
@@ -59,35 +61,32 @@
 </template>
 
 <script lang="ts" setup>
-// import type { UploadProps, UploadUserFile } from 'element-plus';
 import { reactive, ref } from 'vue';
-import {ElMessage, UploadProps, UploadUserFile} from 'element-plus';
+import {
+  ElMessage,
+  UploadProps,
+  UploadRequestHandler,
+  UploadUserFile,
+} from 'element-plus';
 import { v4 } from 'uuid';
 import { getOSSPolicy } from '@/api/forums';
+import axios from 'axios';
+import { AddPosts } from '@/types/forum.d';
+
+const channels = ['General', 'Club', 'Tech', 'Others'];
+
+const upLoadPicsLimit = ref(9);
 
 // do not use same name with ref
-const form = reactive({
-  name: '',
-  region: '',
-  date1: '',
-  date2: '',
+const form: AddPosts = reactive({
+  title: '',
+  content: '',
   status: true,
-  channel: ['General'],
-  resource: '',
-  desc: '',
+  channelId: ['General'],
   pics: [],
 });
 
-// const dataObj = reactive({
-//   policy: 'eyJleHBpcmF0aW9uIjoiMjAyNC0wMi0wMVQwOTowODo1MS4zMDdaIiwiY29uZGl0aW9ucyI6W1siY29udGVudC1sZW5ndGgtcmFuZ2UiLDAsMTA0ODU3NjAwMF0sWyJzdGFydHMtd2l0aCIsIiRrZXkiLCIyMDI0LTAyLTAxLyJdXX0=',
-//   signature: '7LS5sOJbhtgGtqBL0YnQmeKj/EI=',
-//   key: 'LTAI5tQp4aFCsjijg5XAXDTc',
-//   OSSAccessKeyId: 'LTAI5tQp4aFCsjijg5XAXDTc',
-//   // accessKeyId : 'LTAI5tQp4aFCsjijg5XAXDTc',
-//   dir: '2024-02-01/',
-//   host: 'https://company-one-pics.oss-cn-nanjing.aliyuncs.com',
-// });
-
+// OSS policy and signature
 const dataObj = reactive({
   policy: '',
   signature: '',
@@ -97,17 +96,32 @@ const dataObj = reactive({
   host: '',
 });
 
-const fileList = ref<UploadUserFile[]>([
-  // {
-  //   name: 'food.jpeg',
-  //   url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-  // },
-]);
+const fileList = ref<UploadUserFile[]>([]);
 
 const onSubmit = () => {
   console.log('submit!');
 };
 
+const uploadPicsToOSS = () => {
+  return axios(dataObj.host, {
+    method: 'post',
+    data: dataObj,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
+// 上传图片到OSS
+const requestUpload: UploadRequestHandler = async () => {
+  uploadPicsToOSS().then((response) => {
+    if (response.status !== 200) {
+      ElMessage({ message: 'Upload failed', type: 'error', showClose: true });
+    }
+  });
+};
+
+// 上传之前获得OSS的policy和signature
 const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
   if (rawFile.size / 1024 / 1024 > 5) {
     ElMessage.error('Picture size can not exceed 5MB!');
@@ -115,35 +129,33 @@ const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
   }
   return new Promise((resolve, reject) => {
     getOSSPolicy()
-        .then((response) => {
-          console.log(response);
-          dataObj.policy = response.data.policy;
-          dataObj.signature = response.data.signature;
-          dataObj.OSSAccessKeyId = response.data.accessid;
-          dataObj.key = `${response.data.dir}/${v4()}_\${filename}`;
-          dataObj.dir = response.data.dir;
-          dataObj.host = response.data.host;
-          resolve(true)
-        })
-        .catch(err => {
-          console.log("出错了...",err)
-          reject(false);
-        });
+      .then((response) => {
+        const dataTmp = {
+          policy: response.data.policy,
+          signature: response.data.signature,
+          OSSAccessKeyId: response.data.accessid,
+          key: `${response.data.dir}${v4()}_${rawFile.name}`,
+          dir: response.data.dir,
+          host: response.data.host,
+        };
+        Object.assign(dataObj, dataTmp);
+        resolve(true);
+      })
+      .catch((err) => {
+        console.log(`Error: ${err}`);
+        // eslint-disable-next-line
+        reject(false);
+      });
   });
 };
 
-
-const handleUploadSuccess = (res, file) => {
-  fileList.value.push({
-    name: file.name,
-    // url: this.dataObj.host + "/" + this.dataObj.dir + "/" + file.name； 替换${filename}为真正的文件名
-    url: dataObj.host + "/" + dataObj.key.replace("${filename}",file.name)
-  });
+const handleUploadSuccess = () => {
+  form.pics.push(`${dataObj.host}/${dataObj.key}`);
 };
 
 const handleExceed: UploadProps['onExceed'] = (files, uploadFiles) => {
   ElMessage.warning(
-    `The limit is 9, you selected ${files.length} files this time, add up to ${
+    `The limit is ${upLoadPicsLimit.value}, you selected ${files.length} files this time, add up to ${
       files.length + uploadFiles.length
     } totally`
   );
