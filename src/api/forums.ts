@@ -1,3 +1,4 @@
+import { AddPosts } from '@/types/forum.d';
 import request from '@/utils/request';
 
 export function getPosts(channelId: number, pageIndex: number) {
@@ -12,5 +13,13 @@ export function getOSSPolicy() {
   return request({
     url: `/forum/posts/OSSPolicy`,
     method: 'get',
+  });
+}
+
+export function addPosts(data: AddPosts) {
+  return request({
+    url: '/forum/posts',
+    method: 'post',
+    data,
   });
 }

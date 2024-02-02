@@ -1,7 +1,7 @@
 <template>
   <div class="addPostPage">
-    <el-form :model="form" label-width="120px">
-      <el-form-item label="Title">
+    <el-form :model="form" :rules="rules" ref="ruleFormRef" label-width="120px">
+      <el-form-item label="Title" prop="title">
         <el-input v-model="form.title" placeholder="Title" />
       </el-form-item>
       <el-form-item label="Content">
@@ -53,8 +53,14 @@
         </el-upload>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">Create</el-button>
-        <el-button>Cancel</el-button>
+        <router-link to="/forum/general">
+          <el-button type="primary" @click="submitForm(ruleFormRef)">
+            Create
+          </el-button>
+        </router-link>
+        <router-link to="/forum/general">
+          <el-button style="margin-left: 16px">Cancel</el-button>
+        </router-link>
       </el-form-item>
     </el-form>
   </div>
@@ -64,12 +70,14 @@
 import { reactive, ref } from 'vue';
 import {
   ElMessage,
+  FormInstance,
+  FormRules,
   UploadProps,
   UploadRequestHandler,
   UploadUserFile,
 } from 'element-plus';
 import { v4 } from 'uuid';
-import { getOSSPolicy } from '@/api/forums';
+import { addPosts, getOSSPolicy } from '@/api/forums';
 import axios from 'axios';
 import { AddPosts } from '@/types/forum.d';
 
@@ -77,8 +85,20 @@ const channels = ['General', 'Club', 'Tech', 'Others'];
 
 const upLoadPicsLimit = ref(9);
 
+const ruleFormRef = ref<FormInstance>();
+
+const isSave = ref(false);
+
+const rules = reactive<FormRules<AddPosts>>({
+  title: {
+    required: true,
+    message: 'Please input title',
+    trigger: 'blur',
+  },
+});
+
 // do not use same name with ref
-const form: AddPosts = reactive({
+const form = reactive<AddPosts>({
   title: '',
   content: '',
   status: true,
@@ -97,10 +117,6 @@ const dataObj = reactive({
 });
 
 const fileList = ref<UploadUserFile[]>([]);
-
-const onSubmit = () => {
-  console.log('submit!');
-};
 
 const uploadPicsToOSS = () => {
   return axios(dataObj.host, {
@@ -159,6 +175,17 @@ const handleExceed: UploadProps['onExceed'] = (files, uploadFiles) => {
       files.length + uploadFiles.length
     } totally`
   );
+};
+
+const submitForm = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  await formEl.validate((valid, fields) => {
+    if (valid) {
+      addPosts(form);
+      isSave.value = true;
+    }
+    console.log('error submit!', fields);
+  });
 };
 </script>
 

@@ -16,4 +16,11 @@ module.exports = {
         data,
       })
   ),
+
+  ...produceRequest(RESOURCE, ['forum/posts'], 'POST', (res, data) =>
+    res.json({
+      status: 200,
+      message: 'success',
+    })
+  ),
 };
