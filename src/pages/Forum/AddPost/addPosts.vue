@@ -53,11 +53,9 @@
         </el-upload>
       </el-form-item>
       <el-form-item>
-        <router-link to="/forum/general">
-          <el-button type="primary" @click="submitForm(ruleFormRef)">
-            Create
-          </el-button>
-        </router-link>
+        <el-button type="primary" @click="submitForm(ruleFormRef)">
+          Create
+        </el-button>
         <router-link to="/forum/general">
           <el-button style="margin-left: 16px">Cancel</el-button>
         </router-link>
@@ -80,14 +78,13 @@ import { v4 } from 'uuid';
 import { addPosts, getOSSPolicy } from '@/api/forums';
 import axios from 'axios';
 import { AddPosts } from '@/types/forum.d';
+import router from '@/router';
 
 const channels = ['General', 'Club', 'Tech', 'Others'];
 
 const upLoadPicsLimit = ref(9);
 
 const ruleFormRef = ref<FormInstance>();
-
-const isSave = ref(false);
 
 const rules = reactive<FormRules<AddPosts>>({
   title: {
@@ -182,9 +179,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   await formEl.validate((valid, fields) => {
     if (valid) {
       addPosts(form);
-      isSave.value = true;
+      router.push('/forum/general');
     }
-    console.log('error submit!', fields);
+    ElMessage({ message: `error submit! ${fields?.title[0].message}` });
   });
 };
 </script>
