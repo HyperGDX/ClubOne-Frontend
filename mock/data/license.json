@@ -1,0 +1,7 @@
+{
+  "POST": {
+    "license/loginWithUsrPwd": {
+      "token": "abcdefg"
+    }
+  }
+}

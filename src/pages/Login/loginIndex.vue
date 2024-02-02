@@ -2,7 +2,12 @@
   <div class="custom-container">
     <div>
       <h1 class="text-center">Sign In</h1>
-      <el-form ref="loginForm" :model="loginData" :rules="loginRules">
+      <el-form
+        ref="loginForm"
+        :model="loginData"
+        :rules="loginRules"
+        label-width="120px"
+      >
         <el-form-item label="Username" prop="username">
           <el-input v-model="loginData.username" autocomplete="off"></el-input>
         </el-form-item>
@@ -29,6 +34,9 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { ElForm } from 'element-plus';
+import { loginWithUsrPwd } from '@/api/auth.ts';
+import router from '@/router/index.ts';
 
 interface LoginData {
   username: string;
@@ -50,18 +58,19 @@ const loginRules = {
 };
 
 const loginError = ref(false);
-const loginForm = ref('');
+const loginForm = ref<InstanceType<typeof ElForm>>();
 
-const login = () => {
-  loginError.value = false;
-  (loginForm.value as any).validate((valid: boolean) => {
-    if (valid) {
-      // Perform login logic here
-      // add login api
-    } else {
-      loginError.value = true;
-    }
-  });
+const login = async () => {
+  try {
+    const valid = await loginForm.value.validate();
+    if (!valid) return;
+    await loginWithUsrPwd(loginData.value.username, loginData.value.password);
+    // 登录成功，重定向到主页或其他页面
+    router.push({ name: 'WhatsNew' });
+  } catch (error) {
+    // 登录失败，显示错误信息
+    loginError.value = true;
+  }
 };
 </script>
 

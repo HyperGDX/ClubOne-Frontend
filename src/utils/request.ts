@@ -8,10 +8,10 @@ const service = axios.create({
 service.interceptors.request.use(
   (config) => {
     // 这里可以添加一些请求前的处理
-    // const token = localStorage.getItem('token');
-    // if (token) {
-    //   config.headers['Authorization'] = 'Bearer ' + token;
-    // }
+    if (localStorage.getItem('Authorization')) {
+      // eslint-disable-next-line no-param-reassign
+      config.headers.Authorization = localStorage.getItem('Authorization');
+    }
     return config;
   },
   (error) => {
