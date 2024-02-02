@@ -6,7 +6,7 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  ignorePatterns: ['.eslintrc.js', 'mock'],
+  ignorePatterns: ['.eslintrc.js', 'mock', 'vite-env.d.ts'],
   parser: 'vue-eslint-parser', // Specifies the ESLint parser
   parserOptions: {
     parser: '@typescript-eslint/parser', // Specifies the ESLint parser
@@ -216,11 +216,9 @@ module.exports = {
   settings: {
     'import/resolver': {
       alias: {
-        map: [
-          ['@', './src']
-        ],
-        extensions: ['.ts', '.js', '.jsx', '.json', '.vue']
-      }
-    }
-  }
+        map: [['@', './src']],
+        extensions: ['.ts', '.js', '.jsx', '.json', '.vue'],
+      },
+    },
+  },
 };

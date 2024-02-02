@@ -1,6 +1,5 @@
 <template>
   <div
-    id="app"
     v-infinite-scroll="handleScroll"
     v-infinite-scroll-disabled="disabled"
     style="overflow: auto; height: 100vh"
@@ -73,18 +72,22 @@ import { computed, onMounted, ref } from 'vue';
 import getPosts from '@/api/forums.ts';
 import type { Posts } from '@/types/forum.d.ts';
 
-const channelId = 0; // 请替换为你的channelId
+const channelId = 1; // 请替换为你的channelId
 const pageIndex = ref(0);
 const posts = ref<Posts[]>([]);
 const loading = ref(false);
 
 const fetchPosts = async () => {
   loading.value = true;
+  let res: Posts[] = [];
   // 设置滚动节流时间
   setTimeout(async () => {
-    const res: Posts[] = (await getPosts(channelId, pageIndex.value)).data;
+    res = (await getPosts(channelId, pageIndex.value)).data;
     posts.value = [...posts.value, ...res];
     loading.value = false;
+    if (res.length === 0) {
+      loading.value = false;
+    }
   }, 1000);
 };
 
