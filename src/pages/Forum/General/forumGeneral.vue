@@ -72,7 +72,7 @@ import { computed, onMounted, ref } from 'vue';
 import { getPosts } from '@/api/forums';
 import type { Posts } from '@/types/forum.d';
 
-const channelId = 1; // 请替换为你的channelId
+const channelId = ref(1); // 请替换为你的channelId
 const pageIndex = ref(0);
 const posts = ref<Posts[]>([]);
 const loading = ref(false);
@@ -82,7 +82,7 @@ const fetchPosts = async () => {
   let res: Posts[] = [];
   // 设置滚动节流时间
   setTimeout(async () => {
-    res = (await getPosts(channelId, pageIndex.value)).data;
+    res = (await getPosts(channelId.value, pageIndex.value)).data;
     posts.value = [...posts.value, ...res];
     loading.value = false;
     if (res.length === 0) {

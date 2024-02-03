@@ -13,13 +13,16 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: 'whatsNew', component: WhatsNew },
       {
+        name: 'forum',
         path: 'forum',
         children: [
           {
+            name: 'general',
             path: 'general',
             component: () => import('../pages/Forum/General/forumGeneral.vue'),
           },
           {
+            name: 'addPost',
             path: 'addPost',
             component: () => import('../pages/Forum/AddPost/addPosts.vue'),
           },
@@ -35,9 +38,5 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
 });
-
-// export const allRoutes = {
-//   forumGeneral: "/forum/general",
-// };
 
 export default router;

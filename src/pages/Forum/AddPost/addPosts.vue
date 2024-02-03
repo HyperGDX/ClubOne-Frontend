@@ -78,7 +78,9 @@ import { v4 } from 'uuid';
 import { addPosts, getOSSPolicy } from '@/api/forums';
 import axios from 'axios';
 import { AddPosts } from '@/types/forum.d';
-import router from '@/router';
+import {useRouter} from 'vue-router';
+
+const router = useRouter();
 
 const channels = ['General', 'Club', 'Tech', 'Others'];
 
@@ -179,7 +181,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   await formEl.validate((valid, fields) => {
     if (valid) {
       addPosts(form);
-      router.push('/forum/general');
+      router.push({
+        name: 'general'
+      });
     }
     ElMessage({ message: `error submit! ${fields?.title[0].message}` });
   });

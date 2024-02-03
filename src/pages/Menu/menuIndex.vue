@@ -17,7 +17,7 @@
         <span>Tom</span>
       </div>
       <div class="addButton">
-        <router-link to="/forum/addPost">
+        <router-link :to="{name: 'addPost'}">
           <el-button type="primary" round>Add Posts</el-button>
         </router-link>
       </div>
@@ -38,7 +38,7 @@
               <template #title>
                 <el-icon> <ChatLineSquare /> </el-icon>Forum
               </template>
-              <router-link to="/forum/general">
+              <router-link :to="{name: 'general'}">
                 <el-menu-item index="2-1">General</el-menu-item>
               </router-link>
               <el-menu-item index="2-2">Club</el-menu-item>
