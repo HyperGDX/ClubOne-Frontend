@@ -47,7 +47,7 @@
           <el-button type="primary">Upload</el-button>
           <template #tip>
             <div class="el-upload__tip">
-              jpg/png files with a size less than 5MB
+              jpg/png files with a size less than {{sizeLimit}}MB
             </div>
           </template>
         </el-upload>
@@ -65,28 +65,34 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+import {onMounted, reactive, ref} from 'vue';
 import {
   ElMessage,
   FormInstance,
   FormRules,
-  UploadProps,
-  UploadRequestHandler,
   UploadUserFile,
 } from 'element-plus';
-import { v4 } from 'uuid';
-import { addPosts, getOSSPolicy } from '@/api/forums';
-import axios from 'axios';
+import { addPosts } from '@/api/forums';
 import { AddPosts } from '@/types/forum.d';
 import {useRouter} from 'vue-router';
-
-const router = useRouter();
+import useUpload from "@/hooks/useUpload";
 
 const channels = ['General', 'Club', 'Tech', 'Others'];
 
-const upLoadPicsLimit = ref(9);
-
 const ruleFormRef = ref<FormInstance>();
+
+const fileList = ref<UploadUserFile[]>([]);
+
+const sizeLimit = ref(5);
+
+const router = useRouter();
+
+const {uploadFilzeSizeLimit, beforeUpload, upLoadPicsLimit, handleExceed, requestUpload, url} = useUpload();
+
+onMounted(() => {
+  uploadFilzeSizeLimit.value = sizeLimit.value;
+  upLoadPicsLimit.value = 9;
+});
 
 const rules = reactive<FormRules<AddPosts>>({
   title: {
@@ -105,75 +111,8 @@ const form = reactive<AddPosts>({
   pics: [],
 });
 
-// OSS policy and signature
-const dataObj = reactive({
-  policy: '',
-  signature: '',
-  key: '',
-  OSSAccessKeyId: '',
-  dir: '',
-  host: '',
-});
-
-const fileList = ref<UploadUserFile[]>([]);
-
-const uploadPicsToOSS = () => {
-  return axios(dataObj.host, {
-    method: 'post',
-    data: dataObj,
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-};
-
-// 上传图片到OSS
-const requestUpload: UploadRequestHandler = async () => {
-  uploadPicsToOSS().then((response) => {
-    if (response.status !== 200) {
-      ElMessage({ message: 'Upload failed', type: 'error', showClose: true });
-    }
-  });
-};
-
-// 上传之前获得OSS的policy和signature
-const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
-  if (rawFile.size / 1024 / 1024 > 5) {
-    ElMessage.error('Picture size can not exceed 5MB!');
-    return false;
-  }
-  return new Promise((resolve, reject) => {
-    getOSSPolicy()
-      .then((response) => {
-        const dataTmp = {
-          policy: response.data.policy,
-          signature: response.data.signature,
-          OSSAccessKeyId: response.data.accessid,
-          key: `${response.data.dir}${v4()}_${rawFile.name}`,
-          dir: response.data.dir,
-          host: response.data.host,
-        };
-        Object.assign(dataObj, dataTmp);
-        resolve(true);
-      })
-      .catch((err) => {
-        console.log(`Error: ${err}`);
-        // eslint-disable-next-line
-        reject(false);
-      });
-  });
-};
-
 const handleUploadSuccess = () => {
-  form.pics.push(`${dataObj.host}/${dataObj.key}`);
-};
-
-const handleExceed: UploadProps['onExceed'] = (files, uploadFiles) => {
-  ElMessage.warning(
-    `The limit is ${upLoadPicsLimit.value}, you selected ${files.length} files this time, add up to ${
-      files.length + uploadFiles.length
-    } totally`
-  );
+  form.pics.push(url.value);
 };
 
 const submitForm = async (formEl: FormInstance | undefined) => {
@@ -184,8 +123,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       router.push({
         name: 'general'
       });
+    }else {
+      ElMessage({ message: `error submit! ${fields?.title[0].message}` });
     }
-    ElMessage({ message: `error submit! ${fields?.title[0].message}` });
   });
 };
 </script>
