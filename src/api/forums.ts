@@ -11,7 +11,7 @@ export function getPosts(channelId: number, pageIndex: number) {
 
 export function getOSSPolicy() {
   return request({
-    url: `/forum/posts/OSSPolicy`,
+    url: `/forum/posts/OSS/Policy`,
     method: 'get',
   });
 }

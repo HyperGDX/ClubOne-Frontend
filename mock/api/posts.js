@@ -7,7 +7,7 @@ module.exports = {
    */
   ...produceRequest(
     RESOURCE,
-    ['forum/posts/channel/1', 'forum/posts/OSSPolicy'],
+    ['forum/posts/channel/1', 'forum/posts/OSS/Policy'],
     'GET',
     (res, data) =>
       res.json({
