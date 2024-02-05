@@ -47,7 +47,7 @@
           <el-button type="primary">Upload</el-button>
           <template #tip>
             <div class="el-upload__tip">
-              jpg/png files with a size less than {{sizeLimit}}MB
+              jpg/png files with a size less than {{ sizeLimit }}MB
             </div>
           </template>
         </el-upload>
@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted, reactive, ref} from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import {
   ElMessage,
   FormInstance,
@@ -74,8 +74,8 @@ import {
 } from 'element-plus';
 import { addPosts } from '@/api/forums';
 import { AddPosts } from '@/types/forum.d';
-import {useRouter} from 'vue-router';
-import useUpload from "@/hooks/useUpload";
+import { useRouter } from 'vue-router';
+import useUpload from '@/hooks/useUpload';
 
 const channels = ['General', 'Club', 'Tech', 'Others'];
 
@@ -87,7 +87,14 @@ const sizeLimit = ref(5);
 
 const router = useRouter();
 
-const {uploadFilzeSizeLimit, beforeUpload, upLoadPicsLimit, handleExceed, requestUpload, url} = useUpload();
+const {
+  uploadFilzeSizeLimit,
+  beforeUpload,
+  upLoadPicsLimit,
+  handleExceed,
+  requestUpload,
+  url,
+} = useUpload();
 
 onMounted(() => {
   uploadFilzeSizeLimit.value = sizeLimit.value;
@@ -121,9 +128,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     if (valid) {
       addPosts(form);
       router.push({
-        name: 'general'
+        name: 'general',
       });
-    }else {
+    } else {
       ElMessage({ message: `error submit! ${fields?.title[0].message}` });
     }
   });
