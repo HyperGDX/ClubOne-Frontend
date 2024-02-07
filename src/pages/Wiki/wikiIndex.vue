@@ -28,9 +28,9 @@
 <script lang="ts">
 import { ref, watch, onMounted } from 'vue';
 import { throttle } from 'lodash';
-import { updateWiki, getWiki, getWikis, createWiki } from '@/api/wiki.ts';
+import { updateWiki, getWiki, getWikis, createWiki } from '@/api/wiki';
 import { QuillEditor } from '@vueup/vue-quill';
-import type { WikiTitle } from '@/types/wiki.d.ts';
+import type { WikiTitle } from '@/types/wiki.d';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 const onlyCreator = '1';

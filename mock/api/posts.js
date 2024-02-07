@@ -5,11 +5,22 @@ module.exports = {
   /**
    * method two : mock data with mockjs (http://mockjs.com/)
    */
-  ...produceRequest(RESOURCE, ['forum/posts/channel/1'], 'GET', (res, data) =>
+  ...produceRequest(
+    RESOURCE,
+    ['forum/posts/channel/1', 'third/oss/policy'],
+    'GET',
+    (res, data) =>
+      res.json({
+        status: 200,
+        message: 'success',
+        data,
+      })
+  ),
+
+  ...produceRequest(RESOURCE, ['forum/posts'], 'POST', (res, data) =>
     res.json({
       status: 200,
       message: 'success',
-      data,
     })
   ),
 };
