@@ -1,4 +1,4 @@
-import { AddPosts } from '@/types/forum.d';
+import { AddPostsReq } from '@/types/forum.d';
 import request from '@/utils/request';
 
 export function getPosts(channelId: number, pageIndex: number) {
@@ -11,12 +11,12 @@ export function getPosts(channelId: number, pageIndex: number) {
 
 export function getOSSPolicy() {
   return request({
-    url: `/forum/posts/OSS/Policy`,
+    url: `/third/oss/policy`,
     method: 'get',
   });
 }
 
-export function addPosts(data: AddPosts) {
+export function addPosts(data: AddPostsReq) {
   return request({
     url: '/forum/posts',
     method: 'post',

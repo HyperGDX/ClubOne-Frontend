@@ -13,7 +13,7 @@
         />
       </el-form-item>
       <el-form-item label="Channel">
-        <el-checkbox-group v-model="form.channelId">
+        <el-checkbox-group v-model="form.channelId" min="1">
           <el-checkbox-button
             v-for="channelId in channels"
             :key="channelId"
@@ -73,11 +73,21 @@ import {
   UploadUserFile,
 } from 'element-plus';
 import { addPosts } from '@/api/forums';
-import { AddPosts } from '@/types/forum.d';
+import {
+  AddPosts,
+  AddPostsReq,
+  ChannelList,
+  ChannelListMap,
+} from '@/types/forum.d';
 import { useRouter } from 'vue-router';
 import useUpload from '@/hooks/useUpload';
 
-const channels = ['General', 'Club', 'Tech', 'Others'];
+const channels = [
+  ChannelList.General,
+  ChannelList.Club,
+  ChannelList.Tech,
+  ChannelList.Others,
+];
 
 const ruleFormRef = ref<FormInstance>();
 
@@ -109,12 +119,12 @@ const rules = reactive<FormRules<AddPosts>>({
   },
 });
 
-// do not use same name with ref
 const form = reactive<AddPosts>({
+  userId: 1,
   title: '',
   content: '',
   status: true,
-  channelId: ['General'],
+  channelId: [ChannelList.General],
   pics: [],
 });
 
@@ -122,11 +132,26 @@ const handleUploadSuccess = () => {
   form.pics.push(url.value);
 };
 
+const switchChannelId = (channelStrs: string[]) => {
+  const res = channelStrs.map((channelStr) => {
+    return ChannelListMap[channelStr as keyof typeof ChannelListMap];
+  });
+  return res;
+};
+
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      addPosts(form);
+      const post: AddPostsReq = {
+        userId: form.userId,
+        title: form.title,
+        content: form.content,
+        status: form.status ? 1 : 0,
+        channelId: switchChannelId(form.channelId),
+        pics: form.pics,
+      };
+      addPosts(post);
       router.push({
         name: 'general',
       });

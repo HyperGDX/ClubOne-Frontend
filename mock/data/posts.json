@@ -262,7 +262,7 @@
         ]
       }
     ],
-    "forum/posts/OSS/Policy": {
+    "third/oss/policy": {
       "accessid": "LTAI5tQp4aFCsjijg5XAXDTc",
       "policy": "eyJleHBpcmF0aW9uIjoiMjAyNC0wMi0wMlQwMjoyMzoxMC4zNDFaIiwiY29uZGl0aW9ucyI6W1siY29udGVudC1sZW5ndGgtcmFuZ2UiLDAsMTA0ODU3NjAwMF0sWyJzdGFydHMtd2l0aCIsIiRrZXkiLCIyMDI0LTAyLTAyLyJdXX0=",
       "signature": "8MgxxQFubtamppbz0Xm0m7W8icg=",
